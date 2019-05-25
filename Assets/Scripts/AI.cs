@@ -7,6 +7,8 @@ public class AI : MonoBehaviour
 {
     public float speed = 1f;
     public GameObject boundsGo;
+    public Player player;
+    
 
     private Vector3 _moveTarget;
     private Bounds _areaBound;
@@ -28,10 +30,16 @@ public class AI : MonoBehaviour
         _areaBound = boundsGo.GetComponent<Renderer>().bounds;
         _animator = GetComponent<Animator>();
         _speedStep = 0f;
+        player = FindObjectOfType<Player>();
     }
 
     void Update()
     {
+        if (Watch())
+        {
+
+        }
+
         _thinkIntervalTemp -= Time.deltaTime;
         if (_thinkIntervalTemp <= 0.0f)
         {
@@ -39,9 +47,29 @@ public class AI : MonoBehaviour
             _thinkIntervalTemp = thinkInterval;
         }
     }
+    private bool Watch()
+    {
+        var distance = Vector3.Distance(transform.position, player.transform.position);
+        var direction = player.transform.position - transform.position;
+        var angle = Vector3.Angle(direction, transform.forward);
+        Debug.Log($"Sight angle : {angle}");
+
+
+        if(angle < 30)
+        {               
+            Debug.Log("I see the player");
+            return true;
+        }
+        return false;
+    }
+
+
+
 
     private void Think()
     {
+        
+        
         if (Random.Range(0, 3) == 2)
         {
             return;
