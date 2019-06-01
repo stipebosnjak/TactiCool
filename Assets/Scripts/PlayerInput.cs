@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using Assets.Scripts;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -11,7 +12,7 @@ public class PlayerInput : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
-        Assert.IsNotNull(player,"Player should not be null");
+        Assert.IsNotNull(player, "Player should not be null");
     }
 
     private void Update()
@@ -32,11 +33,10 @@ public class PlayerInput : MonoBehaviour
             Debug.Log($"Clicked Collider: {hit.collider.gameObject.name}");
 
             var go = hit.collider.gameObject;
-            if (go.name == "TestFloor")
-            {
-                var position = hit.point;
-                player.Travel(position);
-            }
+
+            var position = hit.point;
+            player.Travel(position);
+
         }
     }
 }

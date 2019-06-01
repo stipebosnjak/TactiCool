@@ -1,20 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Assertions;
 
+[Obsolete("This was a prototype class, Use Enemy class instead")]
 public class AI : MonoBehaviour
 {
     public float speed = 1f;
     public GameObject boundsGo;
     public Player player;
-    
+
 
     private Vector3 _moveTarget;
     private Bounds _areaBound;
     private float _speedStep;
     private Animator _animator;
-
+    private LocomotionSimpleAgent _locomotion;
 
     public float thinkInterval = 3f;
     private float _thinkIntervalTemp;
@@ -31,6 +35,8 @@ public class AI : MonoBehaviour
         _animator = GetComponent<Animator>();
         _speedStep = 0f;
         player = FindObjectOfType<Player>();
+        _thinkIntervalTemp = UnityEngine.Random.Range(2f, 6f);
+        _locomotion = GetComponent<LocomotionSimpleAgent>();
     }
 
     void Update()
@@ -52,12 +58,12 @@ public class AI : MonoBehaviour
         var distance = Vector3.Distance(transform.position, player.transform.position);
         var direction = player.transform.position - transform.position;
         var angle = Vector3.Angle(direction, transform.forward);
-        Debug.Log($"Sight angle : {angle}");
+        //Debug.Log($"Sight angle : {angle}");
 
 
-        if(angle < 30)
-        {               
-            Debug.Log("I see the player");
+        if (angle < 30)
+        {
+            // Debug.Log("I see the player");
             return true;
         }
         return false;
@@ -68,20 +74,44 @@ public class AI : MonoBehaviour
 
     private void Think()
     {
-        
-        
-        if (Random.Range(0, 3) == 2)
+
+        if (UnityEngine.Random.Range(0, 3) == 2)
         {
             return;
         }
+        Vector3 navMeshPosition;
+        if (RandomPoint(RandomPositionWithinBounds(_areaBound), range, out navMeshPosition))
+        {
 
-        Travel(RandomPositionWithinBounds());
+            _locomotion.Move(navMeshPosition);
+            return;
+        }
+
+        Debug.LogWarning("Failed to find a random position in mesh");
+        // Travel(RandomPositionWithinBounds(_areaBound));
     }
 
-    private Vector3 RandomPositionWithinBounds()
+
+    public float range = 10.0f;
+    private bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {
-        var x = Random.Range(_areaBound.min.x, _areaBound.max.x);
-        var z = Random.Range(_areaBound.min.z, _areaBound.max.z);
+        for (int i = 0; i < 30; i++)
+        {
+            Vector3 randomPoint = center + UnityEngine.Random.insideUnitSphere * range;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+            {
+                result = hit.position;
+                return true;
+            }
+        }
+        result = Vector3.zero;
+        return false;
+    }
+    private Vector3 RandomPositionWithinBounds(Bounds bounds)
+    {
+        var x = UnityEngine.Random.Range(bounds.min.x, bounds.max.x);
+        var z = UnityEngine.Random.Range(bounds.min.z, bounds.max.z);
 
         return new Vector3(x, 0.5f, z);
     }
@@ -93,7 +123,7 @@ public class AI : MonoBehaviour
             StopCoroutine(_travelCoroutine);
             _travelCoroutine = null;
         }
-        var flatPosition = new  Vector3(transform.position.x,0.5f, transform.position.z);
+        var flatPosition = new Vector3(transform.position.x, 0.5f, transform.position.z);
         _travelCoroutine = MoveFromTo(gameObject.transform, flatPosition, position, speed);
 
         StartCoroutine(_travelCoroutine);
@@ -109,11 +139,11 @@ public class AI : MonoBehaviour
             t += step; // Goes from 0 to 1, incrementing by step each time
             objectToMove.position = Vector3.Lerp(a, b, t); // Move objectToMove closer to b
             _speedStep = t;
-            _animator.SetFloat(Speed,_speedStep);
+            _animator.SetFloat(Speed, _speedStep);
             objectToMove.LookAt(b);
             yield return new WaitForFixedUpdate(); // Leave the routine and return here in the next frame
         }
-        
+
         objectToMove.position = b;
     }
 }
