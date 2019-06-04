@@ -1,0 +1,20 @@
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol idle.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol jump (2).fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol jump.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol kneel to stand.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol kneeling idle.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol run arc (2).fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol run arc.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol run backward arc (2).fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol run backward arc.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol run backward.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol run.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol stand to kneel.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol strafe (2).fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol strafe.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol walk arc (2).fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol walk arc.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol walk backward arc (2).fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol walk backward arc.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol walk backward.fbx
+Assets/Animations/_MixamoRename/GasMaskSoldier/Pistol_Handgun Locomotion Pack\pistol walk.fbx

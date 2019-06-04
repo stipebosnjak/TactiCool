@@ -1636,6 +1636,7 @@ GameObject:
   - component: {fileID: 4702962920846214718}
   - component: {fileID: 4702962920846214717}
   - component: {fileID: 4702962920846214716}
+  - component: {fileID: 8296172668729738782}
   m_Layer: 0
   m_Name: StrikeSoldier
   m_TagString: Untagged
@@ -1650,7 +1651,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3631496474653630265}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 38.934464, y: 0, z: 12.642361}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1808,8 +1809,8 @@ NavMeshAgent:
   m_GameObject: {fileID: 3631496474653630265}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.00001
-  m_Speed: 3.5
+  m_Radius: 0.3
+  m_Speed: 1.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -1817,8 +1818,8 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
+  m_Height: 2
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &4702962920846214717
@@ -1833,7 +1834,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a53a75e75473798408f96475b3118241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveState: 0
 --- !u!114 &4702962920846214716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1851,6 +1851,19 @@ MonoBehaviour:
   lookAtCoolTime: 0.2
   lookAtHeatTime: 0.2
   looking: 1
+--- !u!114 &8296172668729738782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3631496474653630265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9e8597012a46049978833363432ace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveState: 0
 --- !u!1 &3702036476985093090
 GameObject:
   m_ObjectHideFlags: 0

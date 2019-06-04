@@ -1,0 +1,4 @@
+This project will handle Navigation agent and mecanim coupling in a following way:
+
+First we disabled Navmesh agent updating position and rotation.
+

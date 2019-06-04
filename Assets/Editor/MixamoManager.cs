@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,7 +12,9 @@ public class MixamoManager : EditorWindow
     private static int height = 300;
     private static int x = 0;
     private static int y = 0;
-    private static List<string> allFiles = new List<string>();
+
+    private Avatar _avatar;
+    private Object _avatarObject;
 
     [MenuItem("Window/Mixamo Manager")]
     static void ShowEditor()
@@ -21,28 +25,47 @@ public class MixamoManager : EditorWindow
 
     private void OnGUI()
     {
+
+        EditorGUILayout.BeginHorizontal();
+        _avatarObject = EditorGUILayout.ObjectField(_avatarObject, typeof(Object), true);
+        EditorGUILayout.EndHorizontal();
+
+
         if (GUILayout.Button("Rename"))
         {
-            Rename();
+            if (_avatarObject is Avatar avatar)
+            {
+                _avatar = avatar;                
+            }
+            else
+            {
+                return;
+            }
+
+            string path = EditorUtility.OpenFolderPanel("Path to Character Animations", "", "");
+
+            if(string.IsNullOrWhiteSpace(path))
+                return;
+
+            var paths = DirSearch(path);
+
+            Rename(paths);
         }
     }
 
-    public void Rename()
+    public void Rename(List<string> filePaths)
     {
-        DirSearch();
-
-        if (allFiles.Count > 0)
+        if (filePaths.Count > 0)
         {
-            for (int i = 0; i < allFiles.Count; i++)
+            for (int i = 0; i < filePaths.Count; i++)
             {
-                int idx = allFiles[i].IndexOf("Assets");
-                string filename = Path.GetFileName(allFiles[i]);
-                string asset = allFiles[i].Substring(idx);
-                AnimationClip orgClip = (AnimationClip)AssetDatabase.LoadAssetAtPath(
-                    asset, typeof(AnimationClip));
+                //int idx = allFiles[i].IndexOf("Assets");
+                //string asset = allFiles[i].Substring(idx);
+                AnimationClip orgClip = (AnimationClip) AssetDatabase.LoadAssetAtPath(
+                    filePaths[i], typeof(AnimationClip));
 
-                var fileName = Path.GetFileNameWithoutExtension(allFiles[i]);
-                var importer = (ModelImporter)AssetImporter.GetAtPath(asset);
+                var fileName = Path.GetFileNameWithoutExtension(filePaths[i]);
+                var importer = (ModelImporter) AssetImporter.GetAtPath(filePaths[i]);
 
                 RenameAndImport(importer, fileName);
             }
@@ -53,10 +76,22 @@ public class MixamoManager : EditorWindow
     {
         ModelImporter modelImporter = asset as ModelImporter;
         ModelImporterClipAnimation[] clipAnimations = modelImporter.defaultClipAnimations;
+        modelImporter.animationType = ModelImporterAnimationType.Human;
+        modelImporter.sourceAvatar = _avatar;
 
+        
         for (int i = 0; i < clipAnimations.Length; i++)
         {
-            clipAnimations[i].name = name;
+
+            var clip = clipAnimations[i];
+            clip.loop = true;
+            clip.loopPose = true;
+            clip.loopTime = true;
+
+            clip.lockRootHeightY = true;
+            clip.lockRootRotation = true;
+
+            clip.name = name;
         }
 
         modelImporter.clipAnimations = clipAnimations;
@@ -73,15 +108,33 @@ public class MixamoManager : EditorWindow
         editor.minSize = editor.maxSize;
     }
 
-    static void DirSearch()
+    List<string> DirSearch(string path)
     {
-        string info = Application.dataPath; //+ "/Mixamo/Animations/medea_m_arrebola/Magic";
-        string[] fileInfo = Directory.GetFiles(info, "*.fbx", SearchOption.AllDirectories);
-        foreach (string file in fileInfo)
+        var files = Directory.GetFiles(path, "*.fbx", SearchOption.AllDirectories);
+        var stringBuilder = new StringBuilder();
+
+        var renameHistoryFilePath = Path.Combine(path, "renameHistory.txt");
+        var renameHistoryFilePaths = new List<string>();
+        if (File.Exists(renameHistoryFilePath))
+        {
+            renameHistoryFilePaths = File.ReadAllLines(renameHistoryFilePath).ToList();
+        }
+
+        var nonProcessedFiles = new List<string>();
+        foreach (var file in files.Select(x=>x.Substring(x.IndexOf("Assets"))).Except(renameHistoryFilePaths))
         {
             if (file.EndsWith(".fbx"))
-                allFiles.Add(file);
+            {
+                nonProcessedFiles.Add(file);
+                stringBuilder.AppendLine(file);
+            }
         }
+
+        if (nonProcessedFiles.Any())
+        {
+            File.AppendAllText(renameHistoryFilePath, stringBuilder.ToString());
+        }
+
+        return nonProcessedFiles;
     }
 }
-
